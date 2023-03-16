@@ -1,6 +1,6 @@
 # ChatGPT微信小程序的后端 Java Api
 <p align=center>
-  <img src="logo.png" alt="logo.png" style="zoom: 25%;" />
+  <img src="logo.png" alt="logo.png" width="200" />
 </p>
 
 <p align=center>
