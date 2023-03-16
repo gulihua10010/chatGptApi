@@ -1,0 +1,5 @@
+/src/main/java/cn/jianwoo/chatgpt/api/controller/CacheController.java
+/src/main/resources/application-dev.properties
+/src/main/resources/application-prod.properties
+/src/test/java/cn/jianwoo/chatgpt/api/OpenAiAuthApiApplicationTests.java
+/src/main/java/cn/jianwoo/chatgpt/api/controller/AuthApiController1.java

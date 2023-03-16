@@ -1,0 +1,78 @@
+<configuration>
+    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+    <springProperty scope="context" name="log.srv.tag"
+                    source="log.srv.tag"/>
+    <springProperty scope="context" name="log.base" source="log.base"/>
+    <springProperty scope="context" name="log.file.name"
+                    source="log.file.name"/>
+    <springProperty scope="context" name="log.root.level"
+                    source="log.root.level"/>
+    <springProperty scope="context" name="log.leaf.level"
+                    source="log.leaf.level"/>
+    <!-- when the logging system is first start there is no active profile -->
+    <!--p("log.base").contains("home") -->
+    <if condition='!isNull("log.base")'>
+        <then>
+            <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+                <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                    <pattern>%date [%thread] [${log.srv.tag}] %-5level %logger{80} -
+                        %msg%n
+                    </pattern>
+                    <charset>UTF-8</charset>
+                </encoder>
+            </appender>
+
+            <appender name="rootLoggerFileOut"
+                      class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>${log.base}/${log.file.name}_root.log</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    <FileNamePattern>${log.base}/${log.file.name}_root.%d{yyyy-MM-dd}.%i.log.zip
+                    </FileNamePattern>
+                    <timeBasedFileNamingAndTriggeringPolicy
+                            class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                        <!-- or whenever the file size reaches 100MB -->
+                        <maxFileSize>100MB</maxFileSize>
+                    </timeBasedFileNamingAndTriggeringPolicy>
+                </rollingPolicy>
+                <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                    <pattern>%date [%thread] [${log.srv.tag}] %-5level %logger{80} -
+                        %msg%n
+                    </pattern>
+                    <charset>UTF-8</charset>
+                </encoder>
+            </appender>
+
+            <appender name="busiLoggerFileOut"
+                      class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>${log.base}/${log.file.name}_busi.log</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    <FileNamePattern>${log.base}/${log.file.name}_busi.%d{yyyy-MM-dd}.%i.log.zip
+                    </FileNamePattern>
+                    <timeBasedFileNamingAndTriggeringPolicy
+                            class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                        <!-- or whenever the file size reaches 100MB -->
+                        <maxFileSize>100MB</maxFileSize>
+                    </timeBasedFileNamingAndTriggeringPolicy>
+                </rollingPolicy>
+                <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                    <pattern>%date [%thread] [${log.srv.tag}] %-5level %logger{80} -
+                        %msg%n
+                    </pattern>
+                    <charset>UTF-8</charset>
+                </encoder>
+            </appender>
+
+
+            <logger name="cn.jianwoo.chatgpt" level="${log.leaf.level}"
+                    additivity="false">
+                <appender-ref ref="busiLoggerFileOut"/>
+            </logger>
+
+
+            <root level="${log.root.level}">
+                <appender-ref ref="stdout"/>
+                <appender-ref ref="rootLoggerFileOut"/>
+            </root>
+        </then>
+    </if>
+</configuration>
