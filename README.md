@@ -75,7 +75,7 @@
 
 ## 快速开始
 
-### 【推荐】一键部署博客系统
+### 【推荐】一键部署博服务
 
 #### 部署前必看
 1. 需要吧[AuthApiController.java](src%2Fmain%2Fjava%2Fcn%2Fjianwoo%2Fchatgpt%2Fapi%2Fcontroller%2FAuthApiController.java)里的``/api1``改为``/api``
