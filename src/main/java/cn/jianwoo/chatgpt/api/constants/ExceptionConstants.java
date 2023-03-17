@@ -46,6 +46,8 @@ public final class ExceptionConstants {
     public static final String VALIDATION_FAILED_DATE = "300014";
 
     public static final String ADMIN_PASSWORD_NOT_CORRECT = "400001";
+    public static final String SERVER_SHUT_DOWN = "700001";
+    public static final String SERVER_SHUT_DOWN_DESC = "服务正在维护~";
     public static final String ARTICLE_STATUS_NOT_MATCH = "400002";
     public static final String ARTICLE_STATUS_NOT_MATCH_DESC = "Current status (%s) for article (%s) is not valid.";
     public static final String SYSTEM_EXCEPTION_DESC = "Some errors occur.";

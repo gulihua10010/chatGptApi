@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.jianwoo.chatgpt.api.constants.CacheKey;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,7 +68,7 @@ public class ChatGptTokenServiceImpl implements ChatGptService
     public void verify(String authValue) throws JwBlogException
     {
 
-        String baseUrl = fifuCache.get("proxyBaseUrl");
+        String baseUrl = fifuCache.get(CacheKey.PROXY_BASE_URL);
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + authValue);
         HttpResponse response = HttpRequest.get(baseUrl + "/conversations").headerMap(headers, true)
@@ -129,7 +130,7 @@ public class ChatGptTokenServiceImpl implements ChatGptService
         params.put("model", "text-davinci-002-render-sha");
 
         log.debug(">>>>>/conversation request: {}", params.toJSONString());
-        String baseUrl = fifuCache.get("proxyBaseUrl");
+        String baseUrl = fifuCache.get(CacheKey.PROXY_BASE_URL);
         Request request = new Request.Builder().url(baseUrl + "/conversation")
                 .post(RequestBody.create(MediaType.parse(ContentType.JSON.getValue()), params.toJSONString()))
                 .header("Authorization", askBO.getAuthValue()).header("Accept", "text/event-stream").build();
@@ -281,7 +282,7 @@ public class ChatGptTokenServiceImpl implements ChatGptService
     @Override
     public ConversationDetResBO getConversation(String authValue, String id) throws JwBlogException
     {
-        String baseUrl = fifuCache.get("proxyBaseUrl");
+        String baseUrl = fifuCache.get(CacheKey.PROXY_BASE_URL);
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", authValue);
         HttpResponse response = HttpRequest.get(baseUrl + "/conversation/" + id).headerMap(headers, true)
@@ -382,7 +383,7 @@ public class ChatGptTokenServiceImpl implements ChatGptService
     @Override
     public List<ConversationsResBO> getConversationList(ConversationsReqBO reqBO) throws JwBlogException
     {
-        String baseUrl = fifuCache.get("proxyBaseUrl");
+        String baseUrl = fifuCache.get(CacheKey.PROXY_BASE_URL);
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", reqBO.getAuthValue());
         HttpResponse response = HttpRequest
@@ -437,7 +438,7 @@ public class ChatGptTokenServiceImpl implements ChatGptService
     public ModerationsResBO moderation(ModerationsReqBO reqBO) throws JwBlogException
     {
 
-        String baseUrl = fifuCache.get("proxyBaseUrl");
+        String baseUrl = fifuCache.get(CacheKey.PROXY_BASE_URL);
         JSONObject params = new JSONObject();
         params.put("conversation_id", reqBO.getConversationId());
         params.put("input", reqBO.getContent());
@@ -483,7 +484,7 @@ public class ChatGptTokenServiceImpl implements ChatGptService
     @Override
     public String genTitle(GenTitleReqBO reqBO) throws JwBlogException
     {
-        String baseUrl = fifuCache.get("proxyBaseUrl");
+        String baseUrl = fifuCache.get(CacheKey.PROXY_BASE_URL);
         JSONObject params = new JSONObject();
         params.put("message_id", reqBO.getId());
         params.put("model", "text-davinci-002-render-sha");

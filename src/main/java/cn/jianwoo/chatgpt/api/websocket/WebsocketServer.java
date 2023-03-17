@@ -19,6 +19,9 @@ import javax.websocket.server.ServerEndpoint;
 import cn.hutool.core.io.StreamProgress;
 import cn.hutool.core.lang.Console;
 import cn.hutool.core.util.IdUtil;
+import cn.jianwoo.chatgpt.api.base.BaseResponseDto;
+import cn.jianwoo.chatgpt.api.constants.CacheKey;
+import cn.jianwoo.chatgpt.api.constants.ExceptionConstants;
 import cn.jianwoo.chatgpt.api.util.ApplicationConfigUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,6 +134,19 @@ public class WebsocketServer
         {
             ConversationRequest req = this.convertParam(message, ConversationRequest.class);
             log.info("Message received content: {}", req);
+            String status = cache.get(CacheKey.STATUS);
+            if (!Constants.TRUE.equalsIgnoreCase(status))
+            {
+                ConversationResBO resBO = new ConversationResBO();
+                resBO.setConversationId(req.getConversationId());
+                resBO.setContent(ExceptionConstants.SERVER_SHUT_DOWN_DESC);
+                resBO.setIsDone(true);
+                resBO.setIsSuccess(false);
+                resBO.setCreateTime(DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                session.getBasicRemote().sendText(JSONObject.toJSONString(resBO));
+                return;
+            }
+
             // IP 限流：30 个请求/min/ip
             if (!WebsocketUtil.limit(this.ip))
             {
@@ -175,7 +191,7 @@ public class WebsocketServer
             }
             /***** 测试代码***** TEST *****可删 *****/
 
-            if (Constants.TRUE.equals(cache.get("isDebug")))
+            if (Constants.TRUE.equals(cache.get(CacheKey.IS_DEBUG)))
             {
                 if (!WebsocketUtil.check(this.ip, 5))
                 {
@@ -237,7 +253,7 @@ public class WebsocketServer
                     ConversationResBO resBO = new ConversationResBO();
                     resBO.setConversationId(req.getConversationId());
                     resBO.setContent(
-                            String.valueOf(WebsocketUtil.query(this.ip, Integer.parseInt(cache.get("demoLimit")))));
+                            String.valueOf(WebsocketUtil.query(this.ip, Integer.parseInt(cache.get(CacheKey.DEMO_LIMIT)))));
                     resBO.setIsDone(true);
                     resBO.setIsSuccess(false);
                     resBO.setCreateTime(DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
@@ -245,9 +261,9 @@ public class WebsocketServer
                     return;
                 }
                 // 未登录用户每天只能 20 个请求
-                if (!WebsocketUtil.check(this.ip, Integer.parseInt(cache.get("demoLimit"))))
+                if (!WebsocketUtil.check(this.ip, Integer.parseInt(cache.get(CacheKey.DEMO_LIMIT))))
                 {
-                    log.info("WebsocketUtil.dubug.check{} {} ", this.ip, Integer.parseInt(cache.get("demoLimit")));
+                    log.info("WebsocketUtil.dubug.check{} {} ", this.ip, Integer.parseInt(cache.get(CacheKey.DEMO_LIMIT)));
                     ConversationResBO resBO = new ConversationResBO();
                     resBO.setConversationId(req.getConversationId());
                     resBO.setContent("今天请求已达最大限制数。");

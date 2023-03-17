@@ -73,7 +73,22 @@ public class ChatGptApiServiceImpl implements ChatGptService
         if (response.getStatus() == 401)
         {
             log.error(">>>>verify api key err:{}", response.body());
-            throw new JwBlogException("400001", "API Key不正确");
+            if (response.body().contains("Incorrect"))
+            {
+                throw new JwBlogException("400001", "API Key不正确!");
+            }
+            else if (response.body().contains("deactivated"))
+            {
+                throw new JwBlogException("400001", "账号已被封禁!");
+
+            }
+            else
+            {
+                JSONObject jsonObject = JSONObject.parseObject(response.body());
+                JSONObject error = jsonObject.getJSONObject("error");
+                throw new JwBlogException("400001", error.getString("message"));
+
+            }
         }
         if (response.getStatus() != 200)
         {

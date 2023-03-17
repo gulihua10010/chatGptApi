@@ -1,5 +1,8 @@
 package cn.jianwoo.chatgpt.api.controller;
 
+import cn.jianwoo.chatgpt.api.constants.CacheKey;
+import cn.jianwoo.chatgpt.api.constants.Constants;
+import cn.jianwoo.chatgpt.api.dto.res.StatusResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,7 +52,7 @@ public class IndexController extends BaseController
     @IpLimit
     public String announcement()
     {
-        String announcement = fifuCache.get("announcement");
+        String announcement = fifuCache.get(CacheKey.ANNOUNCEMENT);
         AnnouncementResponse response = AnnouncementResponse.getInstance();
         if (announcement != null)
         {
@@ -59,4 +62,28 @@ public class IndexController extends BaseController
 
     }
 
+
+    /**
+     * 服务状态<br/>
+     * url:/status<br/>
+     *
+     * @return 返回响应 {@link StatusResponse} status(000000-SUCCESS,999999-SYSTEM ERROR)<br/>
+     *         status<br/>
+     * @author gulihua
+     */
+
+    @GetMapping("/status")
+    @IpLimit
+    public String status()
+    {
+        String status = fifuCache.get(CacheKey.STATUS);
+        StatusResponse response = StatusResponse.getInstance();
+        response.setState(false);
+        if (Constants.TRUE.equalsIgnoreCase(status))
+        {
+            response.setState(true);
+        }
+        return super.responseToJSONString(response);
+
+    }
 }

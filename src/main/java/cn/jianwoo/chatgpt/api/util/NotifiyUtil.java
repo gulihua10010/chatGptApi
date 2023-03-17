@@ -69,9 +69,12 @@ public class NotifiyUtil
         account.setFrom(String.format("%s <%s>", senderNick, sender));
         account.setUser(user);
         account.setPass(pwd);
-        account.setSslEnable(false);
+        account.setSslEnable(true);
+        account.setSocketFactoryClass("javax.net.ssl.SSLSocketFactory");
+        account.setSocketFactoryFallback(false);
+        account.setSocketFactoryPort(new BigDecimal(port).intValue());
 
-        account.setStarttlsEnable(false);
+        account.setStarttlsEnable(true);
 
         return account;
 

@@ -24,7 +24,7 @@
 可以通过账号密码、token(感谢[acheong08](https://github.com/acheong08/ChatGPT)提供的代理) 方式，以及 API-Key 方式登录，其中**账号密码、token方式**有被<span style='color:red'>**永久封禁账号**</span>的风险，不建议使用!!!
 2. 本项目实现了百姓网提供的api接口方式的调用，需要申请，点击跳转[申请地址](https://jinshuju.net/f/gzUO2t),大概两三天能收到短信回复。
 3. 防止有人恶意请求 api 和 socket，本项目设置了速度限制，api默认5个请求/秒/IP ,websocket默认 20个请求/分钟/IP。
-4. 未登录用户每天默认可以有20次的提问机会。为了防止api.openai.com的请求速率限制，通过使用一些免费的chatgpt帐户(有18$的额度)来实现，每请求一次就切换到下一个账户。
+4. <span style="color:red">【会被封号】</span>~~未登录用户每天默认可以有20次的提问机会。为了防止api.openai.com的请求速率限制，通过使用一些免费的chatgpt帐户(有18$的额度)来实现，每请求一次就切换到下一个账户。~~
 5. AI生成的图片是在一个*.blob.core.windows.net的国外域名， 由于微信小程序不支持未备案的域名，目前暂时的方法是先保存到本地，有效期是 1 天，然后通过每天凌晨的自动任务进行删除前天生成的图片。 
 
 ## 运行配置
@@ -54,7 +54,7 @@
 - Gitee地址：https://gitee.com/gulihua/chatGptApi
 - Github地址：https://github.com/gulihua10010/chatGptApi
 
-## 其他Chatgpt相关项目
+## 其他ChatGpt相关项目
 - 基于uni-app构建的微信小程序:https://github.com/gulihua10010/wxmini-chatgpt
 - openAi授权SDK:https://github.com/gulihua10010/openAiAuth
 - chatGpt API SDK:https://github.com/gulihua10010/chatGptApiSdk
@@ -113,10 +113,10 @@ ChatGPT代表了人工智能和人类科技发展的新高度。它彻底改变�
 
 ### 开发工具
 
-|       工具        |       说明        |                             官网                             |
-|:---------------:| :---------------: | :----------------------------------------------------------: |
-|      IDEA       |    Java开发IDE    |           https://www.jetbrains.com/idea/download            |
-|     Postman     |    前端开发IDE    |           https://www.postman.com/             |
+|       工具        |    说明     |                             官网                             |
+|:---------------:|:---------:| :----------------------------------------------------------: |
+|      IDEA       | Java开发IDE |           https://www.jetbrains.com/idea/download            |
+|     Postman     |  接口调试工具   |           https://www.postman.com/             |
 
 ### 开发环境
 

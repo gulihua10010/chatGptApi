@@ -41,8 +41,8 @@ public class ApplicationConfigUtil
     @Value("${admin.email}")
     private String email;
 
-    @Value("${demo.access.token.list}")
-    private String demoTokenList;
+    @Value("${demo.access.token}")
+    private String demoToken;
 
     @Value("${demo.access.limit}")
     private String demoLimit;
@@ -162,15 +162,15 @@ public class ApplicationConfigUtil
     }
 
 
-    public String getDemoTokenList()
+    public String getDemoToken()
     {
-        return this.demoTokenList;
+        return this.demoToken;
     }
 
 
-    public void setDemoTokenList(String demoTokenList)
+    public void setDemoToken(String demoToken)
     {
-        this.demoTokenList = demoTokenList;
+        this.demoToken = demoToken;
     }
 
 

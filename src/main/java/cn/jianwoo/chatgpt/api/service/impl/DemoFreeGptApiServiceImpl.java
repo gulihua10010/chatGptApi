@@ -5,10 +5,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import cn.hutool.cache.Cache;
+import cn.jianwoo.chatgpt.api.autotask.AsyncTaskExec;
+import cn.jianwoo.chatgpt.api.constants.CacheKey;
+import cn.jianwoo.chatgpt.api.util.ApplicationConfigUtil;
+import cn.jianwoo.chatgpt.api.util.NotifiyUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -24,7 +28,6 @@ import cn.jianwoo.chatgpt.api.bo.ConversationDetResBO;
 import cn.jianwoo.chatgpt.api.bo.ConversationResBO;
 import cn.jianwoo.chatgpt.api.bo.ConversationsReqBO;
 import cn.jianwoo.chatgpt.api.bo.ConversationsResBO;
-import cn.jianwoo.chatgpt.api.bo.FreeDemoApiKeyBO;
 import cn.jianwoo.chatgpt.api.bo.GenTitleReqBO;
 import cn.jianwoo.chatgpt.api.bo.ModerationsReqBO;
 import cn.jianwoo.chatgpt.api.bo.ModerationsResBO;
@@ -62,7 +65,15 @@ public class DemoFreeGptApiServiceImpl implements ChatGptService
     private TimedCache<String, String> timedCache;
 
     @Autowired
-    private FreeDemoApiKeyBO freeDemoApiKeyBO;
+    private Cache<String, String> fifuCache;
+
+    @Autowired
+    private NotifiyUtil notifiyUtil;
+    @Autowired
+    private ApplicationConfigUtil applicationConfigUtil;
+    @Autowired
+    private AsyncTaskExec asyncTaskExec;
+
     public static final String BASE_URL = "https://api.openai.com/v1";
 
     @Override
@@ -87,13 +98,13 @@ public class DemoFreeGptApiServiceImpl implements ChatGptService
         params.put("temperature", 0);
         params.put("max_tokens", 2048);
         params.put("stream", true);
-        askBO.setAuthValue(fetchApiKey());
+        askBO.setAuthValue(fifuCache.get(CacheKey.DEMO_API_KEY));
         log.debug(">>>>>/chat/completions request: {}", params.toJSONString());
 
         Request request = new Request.Builder().url(BASE_URL + "/chat/completions")
                 .post(RequestBody.create(MediaType.parse(ContentType.JSON.getValue()), params.toJSONString()))
-                .header("Authorization", "Bearer " + askBO.getAuthValue())
-                .header("Accept", "text/event-stream").build();
+                .header("Authorization", "Bearer " + askBO.getAuthValue()).header("Accept", "text/event-stream")
+                .build();
 
         OkHttpClient client = HttpAsyncClientUtil.createHttpClient(proxyBO.getProxy());
         ;
@@ -137,6 +148,7 @@ public class DemoFreeGptApiServiceImpl implements ChatGptService
             resBO.setContent("服务出错!");
             try
             {
+
                 JSONObject jsonObject = JSONObject.parseObject(fail);
                 JSONObject error = jsonObject.getJSONObject("error");
                 if (null != error)
@@ -144,6 +156,18 @@ public class DemoFreeGptApiServiceImpl implements ChatGptService
                     String msg = error.getString("message");
                     resBO.setContent(msg);
                 }
+                asyncTaskExec.execTask(param1 -> {
+                    try
+                    {
+                        notifiyUtil.sendEmail(applicationConfigUtil.getEmail(), "【chatGpt】Demo ApiKey", fail);
+                    }
+                    catch (JwBlogException e)
+                    {
+                        log.error(">>>>>notifiyUtil.sendEmail failed, e: ", e);
+                    }
+
+                });
+
             }
             catch (Exception e)
             {
@@ -246,17 +270,6 @@ public class DemoFreeGptApiServiceImpl implements ChatGptService
             resBO.setContent(sb.toString());
         }
         return resBO;
-    }
-
-
-    private String fetchApiKey() throws JwBlogException
-    {
-        if (CollectionUtils.isEmpty(freeDemoApiKeyBO.getApiKeyList()))
-        {
-            throw new JwBlogException("400001", "API 授权失败!Api-Key 列表为空!");
-        }
-
-        return freeDemoApiKeyBO.getNextApiKey();
     }
 
 

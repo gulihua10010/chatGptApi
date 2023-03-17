@@ -1,16 +1,8 @@
 package cn.jianwoo.chatgpt.api.config;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import cn.hutool.cache.Cache;
-import cn.hutool.cache.CacheUtil;
-import cn.hutool.cache.impl.TimedCache;
-import cn.hutool.core.date.DateUnit;
-import cn.hutool.core.util.StrUtil;
-import cn.jianwoo.chatgpt.api.bo.FreeDemoApiKeyBO;
-import cn.jianwoo.chatgpt.api.util.ApplicationConfigUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -19,7 +11,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import cn.hutool.cache.Cache;
+import cn.hutool.cache.CacheUtil;
+import cn.hutool.cache.impl.TimedCache;
+import cn.hutool.core.date.DateUnit;
 import cn.jianwoo.chatgpt.api.bo.ProxyBO;
+import cn.jianwoo.chatgpt.api.constants.CacheKey;
+import cn.jianwoo.chatgpt.api.constants.Constants;
+import cn.jianwoo.chatgpt.api.util.ApplicationConfigUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -82,23 +81,12 @@ public class AppCfg
     public Cache fifuCache()
     {
         Cache cache = CacheUtil.newFIFOCache(16);
-        cache.put("isDebug", "FALSE");
-        cache.put("demoLimit", applicationConfigUtil.getDemoLimit());
-        cache.put("proxyBaseUrl", applicationConfigUtil.getChatgptProxy());
+        cache.put(CacheKey.IS_DEBUG, Constants.FALSE);
+        cache.put(CacheKey.STATUS, Constants.TRUE);
+        cache.put(CacheKey.DEMO_LIMIT, applicationConfigUtil.getDemoLimit());
+        cache.put(CacheKey.DEMO_API_KEY, applicationConfigUtil.getDemoToken());
+        cache.put(CacheKey.PROXY_BASE_URL, applicationConfigUtil.getChatgptProxy());
         return cache;
-    }
-
-
-    @Bean("freeDemoApiKeyBO")
-    @ConditionalOnMissingBean
-    public FreeDemoApiKeyBO freeDemoApiKeyBO()
-    {
-        String listStr = applicationConfigUtil.getDemoTokenList();
-        List<String> list = StrUtil.splitTrim(listStr,",");
-        FreeDemoApiKeyBO demo = new FreeDemoApiKeyBO();
-        demo.setApiKeyList(list);
-        demo.setIndex(-1);
-        return demo;
     }
 
 

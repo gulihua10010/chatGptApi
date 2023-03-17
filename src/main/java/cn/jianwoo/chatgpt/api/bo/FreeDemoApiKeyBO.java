@@ -17,6 +17,7 @@ import lombok.ToString;
  */
 @Data
 @ToString
+@Deprecated
 public class FreeDemoApiKeyBO extends BaseAuthReqBO
 {
 
