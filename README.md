@@ -64,7 +64,7 @@
 
 |       技术       |       说明        |                             官网                             |
 |:--------------:|:---------------:| :----------------------------------------------------------: |
-|   SpringBoot   |      MVC框架      | [ https://spring.io/projects/spring-boot](https://spring.io/projects/spring-boot) |
+|   SpringBoot   |     Java框架      | [ https://spring.io/projects/spring-boot](https://spring.io/projects/spring-boot) |
 | SpringSecurity |     认证和授权框架     |          https://spring.io/projects/spring-security          |
 |    logBack     |      日志框架       |                   https://logback.qos.ch/                    |
 |     Lombok     |    简化对象封装工具     | [ https://github.com/rzwitserloot/lombok](https://github.com/rzwitserloot/lombok) |
