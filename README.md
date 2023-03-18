@@ -14,8 +14,8 @@
         <img src="https://img.shields.io/badge/hutools--all-5.4.3-brightgreen" ></img>
         <img src="https://img.shields.io/badge/okhttp--sse-3.14.9-orange" ></img>
         <img src="https://img.shields.io/badge/openAiAuth-1.0.7-yellow" ></img>
-
-**本项目在微信小程序端已经上线了!小程序搜索【<span style="color:#04BE02">微 AI 聊天</span>】，认准这个logo图标就可以了，欢迎体验~**
+</p>
+**本项目在微信小程序端已经上线了!小程序搜索【<span style="color:#04BE02">*微 AI 聊天*</span>】，认准这个logo图标就可以了，欢迎体验~**
 
 ## 项目介绍
 
@@ -24,7 +24,7 @@
 可以通过账号密码、token(感谢[acheong08](https://github.com/acheong08/ChatGPT)提供的代理) 方式，以及 API-Key 方式登录，其中**账号密码、token方式**有被<span style='color:red'>**永久封禁账号**</span>的风险，不建议使用!!!
 2. 本项目实现了百姓网提供的api接口方式的调用，需要申请，点击跳转[申请地址](https://jinshuju.net/f/gzUO2t),大概两三天能收到短信回复。
 3. 防止有人恶意请求 api 和 socket，本项目设置了速度限制，api默认5个请求/秒/IP ,websocket默认 20个请求/分钟/IP。
-4. <span style="color:red">【会被封号】</span>~~未登录用户每天默认可以有20次的提问机会。为了防止api.openai.com的请求速率限制，通过使用一些免费的chatgpt帐户(有18$的额度)来实现，每请求一次就切换到下一个账户。~~
+4. <span style="color:red">【**会被封号**】</span>~~未登录用户每天默认可以有20次的提问机会。为了防止api.openai.com的请求速率限制，通过使用一些免费的chatgpt帐户(有18$的额度)来实现，每请求一次就切换到下一个账户。~~
 5. AI生成的图片是在一个*.blob.core.windows.net的国外域名， 由于微信小程序不支持未备案的域名，目前暂时的方法是先保存到本地，有效期是 1 天，然后通过每天凌晨的自动任务进行删除前天生成的图片。 
 
 ## 运行配置
