@@ -101,6 +101,7 @@ public class WebsocketUtil
     {
         try
         {
+
             if (StrUtil.isBlank(ip))
             {
                 log.warn(">>>>The ip address to be checked is empty!!!!");

@@ -24,4 +24,19 @@ public class MessageVO implements Serializable
     private String html;
     private String createTime;
     private Boolean isSend;
+
+    private String conversationId;
+    private Boolean isDone;
+
+    private Boolean isSuccess;
+    private Boolean isImg;
+
+    public String getHtml()
+    {
+        if (null == html)
+        {
+            return this.content;
+        }
+        return this.html;
+    }
 }

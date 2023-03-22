@@ -134,6 +134,15 @@ public class WebsocketServer
         {
             ConversationRequest req = this.convertParam(message, ConversationRequest.class);
             log.info("Message received content: {}", req);
+            // socket心跳检测
+            if ("ping".equals(req.getHeart()))
+            {
+                JSONObject data = new JSONObject();
+                data.put("heart", "pong");
+                data.put("time", System.currentTimeMillis());
+                session.getBasicRemote().sendText(JSONObject.toJSONString(data));
+                return;
+            }
             String status = cache.get(CacheKey.STATUS);
             if (!Constants.TRUE.equalsIgnoreCase(status))
             {
@@ -159,10 +168,21 @@ public class WebsocketServer
                 session.getBasicRemote().sendText(JSONObject.toJSONString(resBO));
                 return;
             }
-            BizValidation.paramValidate(req.getContent(), "content", "content不能为空!");
             if (ChatGptServiceBean.API_KEY.getName().equals(req.getAuthType()))
             {
                 BizValidation.paramValidate(req.getAuthValue(), "authValue", "Authorization不能为空!");
+            }
+            if (ChatGptServiceBean.ACCESS_TOKEN.getName().equals(req.getContent()) || req.getIsGenImg())
+            {
+                BizValidation.paramValidate(req.getContent(), "content", "content不能为空!");
+            }
+            else if ((ChatGptServiceBean.API_KEY.getName().equals(req.getAuthType()) || req.getIsDemo()) && !req.getIsGenImg())
+            {
+                BizValidation.paramValidate(req.getMessages(), "message", "message列表不能为空!");
+                for (ConversationRequest.ChatMessage msg : req.getMessages())
+                {
+                    BizValidation.paramValidate(msg.getContent(), "content", "content不能为空!");
+                }
             }
             // 获取对应的服务 bean
             ChatGptService chatGptService = SpringUtil.getBean(ChatGptServiceBean.get(req.getAuthType()));
@@ -183,7 +203,7 @@ public class WebsocketServer
                     }
                     ChatGptAskReqBO.ChatMessageBO chat = new ChatGptAskReqBO.ChatMessageBO();
                     chat.setRole(msg.getRole());
-                    chat.setContent(req.getContent());
+                    chat.setContent(msg.getContent());
                     list.add(chat);
                 }
                 reqBO.setMessages(list);
@@ -205,6 +225,9 @@ public class WebsocketServer
                     session.getBasicRemote().sendText(JSONObject.toJSONString(resBO));
                     return;
 
+                }
+                if (StrUtil.isBlank(reqBO.getContent()) && CollUtil.isNotEmpty(reqBO.getMessages())) {
+                    reqBO.setContent(reqBO.getMessages().get(0).getContent());
                 }
                 req.setAuthType(ChatGptServiceBean.BAIXING.getName());
                 chatGptService = SpringUtil.getBean(ChatGptServiceBean.get(req.getAuthType()));
@@ -252,8 +275,8 @@ public class WebsocketServer
 
                     ConversationResBO resBO = new ConversationResBO();
                     resBO.setConversationId(req.getConversationId());
-                    resBO.setContent(
-                            String.valueOf(WebsocketUtil.query(this.ip, Integer.parseInt(cache.get(CacheKey.DEMO_LIMIT)))));
+                    resBO.setContent(String
+                            .valueOf(WebsocketUtil.query(this.ip, Integer.parseInt(cache.get(CacheKey.DEMO_LIMIT)))));
                     resBO.setIsDone(true);
                     resBO.setIsSuccess(false);
                     resBO.setCreateTime(DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
@@ -261,9 +284,11 @@ public class WebsocketServer
                     return;
                 }
                 // 未登录用户每天只能 20 个请求
-                if (!WebsocketUtil.check(this.ip, Integer.parseInt(cache.get(CacheKey.DEMO_LIMIT))))
+                if (req.getIsSender()
+                        && !WebsocketUtil.check(this.ip, Integer.parseInt(cache.get(CacheKey.DEMO_LIMIT))))
                 {
-                    log.info("WebsocketUtil.dubug.check{} {} ", this.ip, Integer.parseInt(cache.get(CacheKey.DEMO_LIMIT)));
+                    log.info("WebsocketUtil.debug.check{} {} ", this.ip,
+                            Integer.parseInt(cache.get(CacheKey.DEMO_LIMIT)));
                     ConversationResBO resBO = new ConversationResBO();
                     resBO.setConversationId(req.getConversationId());
                     resBO.setContent("今天请求已达最大限制数。");
@@ -276,7 +301,7 @@ public class WebsocketServer
                 }
             }
 
-            log.info("onMessageon.receive: {}", reqBO.toString());
+            log.debug("onMessageon.receive: {}", reqBO.toString());
             if (!req.getIsGenImg())
             {
                 // 异步流式请求
@@ -340,7 +365,8 @@ public class WebsocketServer
 
                                         ConversationResBO resBO = new ConversationResBO();
                                         resBO.setConversationId(req.getConversationId());
-                                        resBO.setContent(newUrl);
+                                        resBO.setUrl(newUrl);
+                                        resBO.setContent("[图片]");
                                         resBO.setIsImg(true);
                                         resBO.setId(JwUtil.generateUserId());
                                         resBO.setIsDone(false);

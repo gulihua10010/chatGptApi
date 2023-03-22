@@ -12,6 +12,7 @@ public final class CacheKey
     public static final String DEMO_API_KEY = "demoApiKey";
     public static final String PROXY_BASE_URL = "proxyBaseUrl";
     public static final String ANNOUNCEMENT = "announcement";
+    public static final String DEMO_CHAT = "demoChat";
     public static final String STATUS = "status";
 
 }

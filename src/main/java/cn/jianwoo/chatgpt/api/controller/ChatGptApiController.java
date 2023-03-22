@@ -83,6 +83,7 @@ public class ChatGptApiController extends BaseController
                     ConversationsVO vo = new ConversationsVO();
                     vo.setId(res.getId());
                     vo.setCreateTime(res.getCreateTime());
+                    vo.setUpdateTime(res.getUpdateTime());
                     vo.setTitle(res.getTitle());
                     list.add(vo);
                 }

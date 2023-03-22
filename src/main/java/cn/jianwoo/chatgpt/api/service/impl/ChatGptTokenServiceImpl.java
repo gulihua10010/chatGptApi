@@ -8,7 +8,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.jianwoo.chatgpt.api.autotask.AsyncTaskExec;
 import cn.jianwoo.chatgpt.api.constants.CacheKey;
+import cn.jianwoo.chatgpt.api.util.ApplicationConfigUtil;
+import cn.jianwoo.chatgpt.api.util.NotifiyUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,6 +66,12 @@ public class ChatGptTokenServiceImpl implements ChatGptService
 
     @Autowired
     private Cache<String, String> fifuCache;
+    @Autowired
+    private NotifiyUtil notifiyUtil;
+    @Autowired
+    private ApplicationConfigUtil applicationConfigUtil;
+    @Autowired
+    private AsyncTaskExec asyncTaskExec;
 
     @Override
     public void verify(String authValue) throws JwBlogException
@@ -170,12 +179,24 @@ public class ChatGptTokenServiceImpl implements ChatGptService
             ConversationResBO resBO = new ConversationResBO();
             resBO.setRole("assistant");
             resBO.setIsDone(true);
-            resBO.setContent("服务出错!");
+            resBO.setContent("服务出错, 请稍后再试!");
             resBO.setCreateTime(DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
             resBO.setIsSuccess(false);
             try
             {
                 log.error("conversation failed msg:{}", fail);
+
+                asyncTaskExec.execTask(param1 -> {
+                    try
+                    {
+                        notifiyUtil.sendEmail(applicationConfigUtil.getEmail(), "【chatGpt】Token Service exception", fail);
+                    }
+                    catch (JwBlogException e)
+                    {
+                        log.error(">>>>>notifiyUtil.sendEmail failed, e: ", e);
+                    }
+
+                });
                 if (fail.contains("expired"))
                 {
                     resBO.setContent("Access Token过期");
@@ -187,6 +208,10 @@ public class ChatGptTokenServiceImpl implements ChatGptService
                 else if (fail.contains("Rate limited"))
                 {
                     resBO.setContent("当前使用人数过多，请稍后再试~");
+                }
+                else if (fail.contains("Name or service not known"))
+                {
+                    resBO.setContent("服务器网络开小差了, 请稍后再试~");
                 }
                 else
                 {
@@ -424,6 +449,7 @@ public class ChatGptTokenServiceImpl implements ChatGptService
                 ConversationsResBO res = new ConversationsResBO();
                 res.setId(o.getString("id"));
                 res.setCreateTime(o.getString("create_time"));
+                res.setUpdateTime(res.getCreateTime());
                 res.setTitle(o.getString("title"));
                 list.add(res);
             }

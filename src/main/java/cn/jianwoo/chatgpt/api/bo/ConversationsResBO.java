@@ -17,6 +17,7 @@ public class ConversationsResBO implements Serializable
 {
     private static final long serialVersionUID = 8977480847981522225L;
     private String createTime;
+    private String updateTime;
     private String id;
     private String title;
 }

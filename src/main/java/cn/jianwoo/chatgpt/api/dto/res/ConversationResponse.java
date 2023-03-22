@@ -1,9 +1,6 @@
 package cn.jianwoo.chatgpt.api.dto.res;
 
-import java.util.List;
-
 import cn.jianwoo.chatgpt.api.base.BaseResponseDto;
-import cn.jianwoo.chatgpt.api.dto.vo.MessageVO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

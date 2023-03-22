@@ -19,7 +19,7 @@ public class SSLSocketClient
     {
         try
         {
-            SSLContext sslContext = SSLContext.getInstance("SSL");
+            SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
             sslContext.init(null, getTrustManager(), new SecureRandom());
             return sslContext.getSocketFactory();
         }

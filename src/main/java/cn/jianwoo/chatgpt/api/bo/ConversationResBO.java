@@ -20,6 +20,7 @@ public class ConversationResBO implements Serializable
     private String id;
     private String content;
     private String html;
+    private String url;
     private String role;
     private String createTime;
     private Boolean isDone;

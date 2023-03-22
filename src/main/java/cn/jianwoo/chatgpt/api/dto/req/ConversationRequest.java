@@ -1,6 +1,7 @@
 package cn.jianwoo.chatgpt.api.dto.req;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import cn.jianwoo.chatgpt.api.base.BaseRequestDto;
@@ -25,9 +26,12 @@ public class ConversationRequest extends BaseRequestDto implements Serializable
     private String parentId;
     private String content;
     private String id;
+    private String heart;
+    private Long time;
     private String model;// api有效
     private Boolean isDemo = false;
     private Boolean isGenImg = false;
+    private Boolean isSender = true;
 
     private List<ChatMessage> messages;
 
@@ -38,10 +42,13 @@ public class ConversationRequest extends BaseRequestDto implements Serializable
                 ", parentId='" + parentId + '\'' +
                 ", content='" + content + '\'' +
                 ", id='" + id + '\'' +
+                ", heart='" + heart + '\'' +
+                ", time='" + time + '\'' +
                 ", model='" + model + '\'' +
                 ", isDemo=" + isDemo +
                 ", isGenImg=" + isGenImg +
                 ", messages=" + messages +
+                ", isSender=" + isSender +
                 '}';
     }
 

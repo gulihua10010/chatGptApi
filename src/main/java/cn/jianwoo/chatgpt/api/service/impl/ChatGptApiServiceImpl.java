@@ -7,10 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import cn.jianwoo.chatgpt.api.autotask.AsyncTaskExec;
 import cn.jianwoo.chatgpt.api.bo.ConversationDetResBO;
 import cn.jianwoo.chatgpt.api.bo.ConversationsReqBO;
 import cn.jianwoo.chatgpt.api.bo.ConversationsResBO;
 import cn.jianwoo.chatgpt.api.bo.GenTitleReqBO;
+import cn.jianwoo.chatgpt.api.util.ApplicationConfigUtil;
+import cn.jianwoo.chatgpt.api.util.NotifiyUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,6 +64,14 @@ public class ChatGptApiServiceImpl implements ChatGptService
 
     @Autowired
     private TimedCache<String, String> timedCache;
+
+    @Autowired
+    private NotifiyUtil notifiyUtil;
+    @Autowired
+    private ApplicationConfigUtil applicationConfigUtil;
+    @Autowired
+    private AsyncTaskExec asyncTaskExec;
+
     public static final String BASE_URL = "https://api.openai.com/v1";
 
     @Override
@@ -158,15 +169,34 @@ public class ChatGptApiServiceImpl implements ChatGptService
             resBO.setRole("assistant");
             resBO.setIsDone(true);
             resBO.setCreateTime(DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
-            resBO.setContent("服务出错!");
+            resBO.setContent("服务出错, 请稍后再试!");
             try
             {
-                JSONObject jsonObject = JSONObject.parseObject(fail);
-                JSONObject error = jsonObject.getJSONObject("error");
-                if (null != error)
+
+                asyncTaskExec.execTask(param1 -> {
+                    try
+                    {
+                        notifiyUtil.sendEmail(applicationConfigUtil.getEmail(), "【chatGpt】Api service exception", fail);
+                    }
+                    catch (JwBlogException e)
+                    {
+                        log.error(">>>>>notifiyUtil.sendEmail failed, e: ", e);
+                    }
+
+                });
+                if (JSONObject.isValidObject(fail))
                 {
-                    String msg = error.getString("message");
-                    resBO.setContent(msg);
+                    JSONObject jsonObject = JSONObject.parseObject(fail);
+                    JSONObject error = jsonObject.getJSONObject("error");
+                    if (null != error)
+                    {
+                        String msg = error.getString("message");
+                        resBO.setContent(msg);
+                    }
+                }
+                else if (null != fail && fail.contains("Name or service not known"))
+                {
+                    resBO.setContent("服务器网络开小差了, 请稍后再试~");
                 }
             }
             catch (Exception e)
@@ -221,7 +251,7 @@ public class ChatGptApiServiceImpl implements ChatGptService
     }
 
 
-    private static ConversationResBO parseConversation(String res)
+    protected static ConversationResBO parseConversation(String res)
     {
         ConversationResBO resBO = new ConversationResBO();
         resBO.setRole("assistant");
@@ -286,7 +316,7 @@ public class ChatGptApiServiceImpl implements ChatGptService
      * @param %param name% %param description%
      * @return
      */
-    private String cacheAppendText(ConversationResBO resBO)
+    protected String cacheAppendText(ConversationResBO resBO)
     {
         String id = resBO.getId();
         if (id == null || !resBO.getIsSuccess() || null == resBO.getContent())

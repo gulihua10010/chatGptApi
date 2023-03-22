@@ -34,8 +34,8 @@ public class HttpAsyncClientUtil
         client.connectTimeout(60, TimeUnit.SECONDS);
         client.writeTimeout(60, TimeUnit.SECONDS);
         client.readTimeout(60, TimeUnit.SECONDS);
-        client.sslSocketFactory(SSLSocketClient.getSSLSocketFactory(), SSLSocketClient.getX509TrustManager())
-                .hostnameVerifier(SSLSocketClient.getHostnameVerifier());
+//        client.sslSocketFactory(SSLSocketClient.getSSLSocketFactory(), SSLSocketClient.getX509TrustManager())
+//                .hostnameVerifier(SSLSocketClient.getHostnameVerifier());
         if (null != proxy)
         {
             client.proxy(proxy);
