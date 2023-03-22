@@ -22,7 +22,7 @@
 
 1. 本项目是基于springBoot开发，采用 stream + websocket 与小程序进行通信(微信小程序不支持SSE)，异步响应无需等待! 支持记住上下文的连续对话，全AI对话和AI生成图片。
 其中上下文的连续对话，全AI对话要配合[前端小程序](https://github.com/gulihua10010/wxmini-chatgpt)使用。
-可以通过账号密码、token(感谢[acheong08](https://github.com/acheong08/ChatGPT)提供的代理) 方式，以及 API-Key 方式登录，其中**账号密码、token方式**有被<span style='color:red'>**永久封禁账号**</span>的风险，不建议使用!!!
+可以通过账号密码、token(感谢[acheong08](https://github.com/acheong08/ChatGPT)提供的代理) 方式，以及 API-Key 方式登录，其中**账号密码、token方式**有被<span style='color:red'>**永久封禁账号**</span>的风险，不建议使用，多个API Key在同一IP地址的服务器请求也有被封号的几率!!!
 2. 本项目实现了百姓网提供的api接口方式的调用，需要申请，点击跳转[申请地址](https://jinshuju.net/f/gzUO2t),大概两三天能收到短信回复。
 3. 防止有人恶意请求 api 和 socket，本项目设置了速度限制，api默认5个请求/秒/IP ,websocket默认 20个请求/分钟/IP。
 4. <span style="color:red">【**会被封号**】</span>~~未登录用户每天默认可以有20次的提问机会。为了防止api.openai.com的请求速率限制，通过使用一些免费的chatgpt帐户(有18$的额度)来实现，每请求一次就切换到下一个账户。~~
