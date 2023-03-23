@@ -209,6 +209,11 @@ public class WebsocketServer
                 reqBO.setMessages(list);
 
             }
+            if (StrUtil.isBlank(reqBO.getContent()) && CollUtil.isNotEmpty(reqBO.getMessages())) {
+                reqBO.setContent(reqBO.getMessages().get(0).getContent());
+            }
+            log.debug("reqBO.getContent() {}",reqBO.getContent());
+
             /***** 测试代码***** TEST *****可删 *****/
 
             if (Constants.TRUE.equals(cache.get(CacheKey.IS_DEBUG)))
@@ -226,9 +231,7 @@ public class WebsocketServer
                     return;
 
                 }
-                if (StrUtil.isBlank(reqBO.getContent()) && CollUtil.isNotEmpty(reqBO.getMessages())) {
-                    reqBO.setContent(reqBO.getMessages().get(0).getContent());
-                }
+
                 req.setAuthType(ChatGptServiceBean.BAIXING.getName());
                 chatGptService = SpringUtil.getBean(ChatGptServiceBean.get(req.getAuthType()));
                 chatGptService.conversation(reqBO, param -> {
@@ -270,7 +273,7 @@ public class WebsocketServer
                 req.setAuthType(ChatGptServiceBean.DEMO.getName());
                 chatGptService = SpringUtil.getBean(ChatGptServiceBean.get(req.getAuthType()));
 
-                if ("查询次数".equals(StrUtil.trimToEmpty(req.getContent())))
+                if ("查询次数".equals(StrUtil.trimToEmpty(reqBO.getContent())))
                 {
 
                     ConversationResBO resBO = new ConversationResBO();

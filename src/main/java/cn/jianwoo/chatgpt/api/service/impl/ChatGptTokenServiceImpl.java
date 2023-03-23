@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.jianwoo.chatgpt.api.autotask.AsyncTaskExec;
+import cn.jianwoo.chatgpt.api.bo.CreditGrantsResBO;
 import cn.jianwoo.chatgpt.api.constants.CacheKey;
 import cn.jianwoo.chatgpt.api.util.ApplicationConfigUtil;
 import cn.jianwoo.chatgpt.api.util.NotifiyUtil;
@@ -549,6 +550,12 @@ public class ChatGptTokenServiceImpl implements ChatGptService
 
         }
         return jsonObject.getString("title");
+    }
+
+    @Override
+    public CreditGrantsResBO queryBillingCreditGrants(String authToken) throws JwBlogException {
+        throw new JwBlogException("500001", "Unsupported methods!");
+
     }
 
 }

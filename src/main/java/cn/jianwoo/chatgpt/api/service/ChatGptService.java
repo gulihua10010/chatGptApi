@@ -5,6 +5,7 @@ import cn.jianwoo.chatgpt.api.bo.ConversationDetResBO;
 import cn.jianwoo.chatgpt.api.bo.ConversationResBO;
 import cn.jianwoo.chatgpt.api.bo.ConversationsReqBO;
 import cn.jianwoo.chatgpt.api.bo.ConversationsResBO;
+import cn.jianwoo.chatgpt.api.bo.CreditGrantsResBO;
 import cn.jianwoo.chatgpt.api.bo.GenTitleReqBO;
 import cn.jianwoo.chatgpt.api.bo.ModerationsReqBO;
 import cn.jianwoo.chatgpt.api.bo.ModerationsResBO;
@@ -106,4 +107,16 @@ public interface ChatGptService
      * @return String
      **/
     String genTitle(GenTitleReqBO reqBO) throws JwBlogException;
+
+
+
+    /**
+     * 查询账单明细<br>
+     * @param authToken authToken
+
+     * @author gulihua
+     * @return CreditGrantsResBO
+     * @throws JwBlogException <br>
+     **/
+    CreditGrantsResBO queryBillingCreditGrants(String authToken) throws JwBlogException;
 }

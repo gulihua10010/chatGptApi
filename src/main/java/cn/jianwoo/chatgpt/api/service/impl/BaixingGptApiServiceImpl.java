@@ -6,6 +6,7 @@ import java.util.List;
 import cn.jianwoo.chatgpt.api.bo.ConversationDetResBO;
 import cn.jianwoo.chatgpt.api.bo.ConversationsReqBO;
 import cn.jianwoo.chatgpt.api.bo.ConversationsResBO;
+import cn.jianwoo.chatgpt.api.bo.CreditGrantsResBO;
 import cn.jianwoo.chatgpt.api.bo.GenTitleReqBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -133,5 +134,11 @@ public class BaixingGptApiServiceImpl implements ChatGptService
     public String genTitle(GenTitleReqBO reqBO) throws JwBlogException
     {
         throw new JwBlogException("500001", "Unsupported methods!");
+    }
+
+    @Override
+    public CreditGrantsResBO queryBillingCreditGrants(String authToken) throws JwBlogException {
+        throw new JwBlogException("500001", "Unsupported methods!");
+
     }
 }

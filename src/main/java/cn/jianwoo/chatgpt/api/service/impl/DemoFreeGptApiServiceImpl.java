@@ -1,19 +1,12 @@
 package cn.jianwoo.chatgpt.api.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSONObject;
-
 import cn.hutool.cache.Cache;
 import cn.hutool.cache.impl.TimedCache;
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.http.ContentType;
 import cn.jianwoo.chatgpt.api.autotask.AsyncTaskExec;
 import cn.jianwoo.chatgpt.api.bo.ChatGptAskReqBO;
 import cn.jianwoo.chatgpt.api.bo.ConversationDetResBO;
@@ -28,15 +21,9 @@ import cn.jianwoo.chatgpt.api.constants.CacheKey;
 import cn.jianwoo.chatgpt.api.exception.JwBlogException;
 import cn.jianwoo.chatgpt.api.service.ChatGptService;
 import cn.jianwoo.chatgpt.api.stream.Callback;
-import cn.jianwoo.chatgpt.api.stream.HttpAsyncClientUtil;
 import cn.jianwoo.chatgpt.api.util.ApplicationConfigUtil;
-import cn.jianwoo.chatgpt.api.util.MarkdownToHtmlUtils;
 import cn.jianwoo.chatgpt.api.util.NotifiyUtil;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 
 /**
  * Demo Gpt<br>

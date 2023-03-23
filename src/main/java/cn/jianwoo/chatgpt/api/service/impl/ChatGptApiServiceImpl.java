@@ -11,9 +11,11 @@ import cn.jianwoo.chatgpt.api.autotask.AsyncTaskExec;
 import cn.jianwoo.chatgpt.api.bo.ConversationDetResBO;
 import cn.jianwoo.chatgpt.api.bo.ConversationsReqBO;
 import cn.jianwoo.chatgpt.api.bo.ConversationsResBO;
+import cn.jianwoo.chatgpt.api.bo.CreditGrantsResBO;
 import cn.jianwoo.chatgpt.api.bo.GenTitleReqBO;
 import cn.jianwoo.chatgpt.api.util.ApplicationConfigUtil;
 import cn.jianwoo.chatgpt.api.util.NotifiyUtil;
+import com.alibaba.fastjson2.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -365,6 +367,52 @@ public class ChatGptApiServiceImpl implements ChatGptService
     public String genTitle(GenTitleReqBO reqBO) throws JwBlogException
     {
         throw new JwBlogException("500001", "Unsupported API methods!");
+    }
+
+    @Override
+    public CreditGrantsResBO queryBillingCreditGrants(String authToken) throws JwBlogException {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", authToken);
+        HttpResponse response = HttpRequest.get(BASE_URL + "/dashboard/billing/credit_grants").headerMap(headers, true)
+                .setProxy(proxyBO.getProxy()).execute();
+
+        if (response.getStatus() == 401)
+        {
+            log.error(">>>>verify api key err:{}", response.body());
+            if (response.body().contains("Incorrect"))
+            {
+                throw new JwBlogException("400001", "API Key不正确!");
+            }
+            else if (response.body().contains("deactivated"))
+            {
+                throw new JwBlogException("400001", "账号已被封禁!");
+
+            }
+            else
+            {
+                JSONObject jsonObject = JSONObject.parseObject(response.body());
+                JSONObject error = jsonObject.getJSONObject("error");
+                throw new JwBlogException("400001", error.getString("message"));
+
+            }
+        }
+        if (response.getStatus() != 200)
+        {
+            log.error(">>>>verify api key err:{}", response.body());
+            throw new JwBlogException("500001", "服务异常!");
+        }
+
+        try
+        {
+            return JSON.parseObject(response.body(), CreditGrantsResBO.class);
+        }
+        catch (Exception e)
+        {
+            log.error(">>>>queryBillingCreditGrants.response:{}", response.body());
+            log.error(">>>>queryBillingCreditGrants.response.parse.exception, e:", e);
+            throw new JwBlogException("999999", "服务异常");
+
+        }
     }
 
 }
