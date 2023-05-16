@@ -16,10 +16,25 @@
         <img src="https://img.shields.io/badge/openAiAuth-1.0.7-yellow" ></img>
 </p>
 
+
+**项目 2.0 不再开源，有需要的开发者可以通过下方官网的客服进行联系，2.0主要功能也在下方**
+
 **本项目在微信小程序端已经上线了!小程序搜索【<span style="color:#04BE02">*微 AI 聊天*</span>】，认准这个logo图标就可以了，欢迎体验~**
 
-## 项目介绍
+**官网：** https://aiget.cc
 
+## 项目介绍
+#### v2.0
+1. 支持登录，包括手机号登录，邮箱登录
+2. 支持敏感词检测
+3. 支持 AI 绘画，使用了Flagstudio接口
+4. 支持文案生成，有 77+个模版
+5. UI 适配了 PC 电脑端
+6. 系统采用积分制，每天送 10 积分，邀请注册送积分，签到分享送积分
+7. 添加了支付充值功能，使用易支付
+8. 返回的生成内容使用 Markdown 渲染，支持代码行号和高亮
+
+#### v1.0
 1. 本项目是基于springBoot开发，采用 stream + websocket 与小程序进行通信(微信小程序不支持SSE)，异步响应无需等待! 支持记住上下文的连续对话，全AI对话和AI生成图片。
 其中上下文的连续对话，全AI对话要配合[前端小程序](https://github.com/gulihua10010/wxmini-chatgpt)使用。
 可以通过账号密码、token(感谢[acheong08](https://github.com/acheong08/ChatGPT)提供的代理) 方式，以及 API-Key 方式登录，其中**账号密码、token方式**有被<span style='color:red'>**永久封禁账号**</span>的风险，不建议使用，多个API Key在同一IP地址的服务器请求也有被封号的几率!!!
