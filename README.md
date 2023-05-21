@@ -20,6 +20,9 @@
 **项目 2.0 不再开源，有需要的开发者可以通过下方官网的客服进行联系，2.0主要功能也在下方**
 
 **本项目在微信小程序端已经上线了!小程序搜索【<span style="color:#04BE02">*微 AI 聊天*</span>】，认准这个logo图标就可以了，欢迎体验~**
+<p align=center>
+  <img src="https://cdn.jianwoo.cn/image/ai/gh_5f16fbb0f72d_1280.jpg" alt="微信小程序" width="200" />
+</p>
 
 **官网：** https://aiget.cc
 
@@ -42,6 +45,22 @@
 3. 防止有人恶意请求 api 和 socket，本项目设置了速度限制，api默认5个请求/秒/IP ,websocket默认 20个请求/分钟/IP。
 4. <span style="color:red">【**会被封号**】</span>~~未登录用户每天默认可以有20次的提问机会。为了防止api.openai.com的请求速率限制，通过使用一些免费的chatgpt帐户(有18$的额度)来实现，每请求一次就切换到下一个账户。~~
 5. AI生成的图片是在一个*.blob.core.windows.net的国外域名， 由于微信小程序不支持未备案的域名，目前暂时的方法是先保存到本地，有效期是 1 天，然后通过每天凌晨的自动任务进行删除前天生成的图片。 
+
+
+
+## 网站/小程序v2.0截图
+<img src="https://cdn.jianwoo.cn/image/ai/screenslot/3D82A132714222A3E4C457D2274AE2C1.jpg" alt="截图" width=300/>
+<img src="https://cdn.jianwoo.cn/image/ai/screenslot/3E16264741F7C53487DC1C06BD412D02.jpg" alt="截图" width=300 />
+<img src="https://cdn.jianwoo.cn/image/ai/screenslot/50DFC2AC810ADCE225FBFC3072A668B2.jpg" alt="截图" width=300 />
+<img src="https://cdn.jianwoo.cn/image/ai/screenslot/60BBF63198B9ACEAC31E443B9CA6028B.jpg" alt="截图" width=300 />
+<img src="https://cdn.jianwoo.cn/image/ai/screenslot/8616A257C078175CB0FB8F5E30CD32B6.jpg" alt="截图" width=300 />
+<img src="https://cdn.jianwoo.cn/image/ai/screenslot/CB50B104757B49B4FFF350C88B213D7D.jpg" alt="截图" width=300 />
+<img src="https://cdn.jianwoo.cn/image/ai/screenslot/CE2CAAA5F268B424676A2FBAEE464A86.jpg" alt="截图" width=300 />
+<img src="https://cdn.jianwoo.cn/image/ai/screenslot/F395E9647442FD76467FD386689D03F6.jpg" alt="截图" width=300 />
+<img src="https://cdn.jianwoo.cn/image/ai/screenslot/QQ20230520-0.png" alt="截图" width=500 />
+<img src="https://cdn.jianwoo.cn/image/ai/screenslot/QQ20230520-1.png" alt="截图" width=500 />
+<img src="https://cdn.jianwoo.cn/image/ai/screenslot/QQ20230520-2.png" alt="截图" width=500 />
+
 
 ## 运行配置
 
